@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+int ispossible(vector<int> &pages, int n, int b, int mid) {
+    int ninjacount = 0;
+    int pagesum = 0;
+    for (int i = 0; i < n; i++) {
+        if (pages[i] > mid) {
+            return false;
+        }
+        if (pagesum + pages[i] > mid) {
+            ninjacount++;
+            pagesum = 0;
+        }
+        pagesum += pages[i];
+    }
+    return ninjacount < b;
+}
+
+int allocateBooks(vector<int> &pages, int n, int b) {
+	 if (n < b) {
+        return -1; 
+    }
+
+    int s = 0;
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += pages[i];
+    }
+    int e = sum;
+    int ans = -1;
+    int mid = s + (e - s) / 2;
+    while (s <= e) {
+        if (ispossible(pages, n, b, mid)) {
+            ans = mid;
+            e = mid - 1;
+        } else {
+            s = mid + 1;
+        }
+        mid = s + (e - s) / 2;
+    }
+    return ans;
+}
